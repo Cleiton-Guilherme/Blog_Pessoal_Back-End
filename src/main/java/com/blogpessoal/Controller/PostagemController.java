@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.blogpessoal.Repository.PostagemRepository;
+import com.blogpessoal.Repository.TemaRepository;
 import com.blogpessoal.model.Postagem;
 
 @RestController
@@ -30,6 +31,10 @@ public class PostagemController {
 	
 	@Autowired
 	private PostagemRepository postagemRepository;
+	
+	@Autowired
+	private TemaRepository temaRepository;
+
 	
 	
 	@GetMapping
@@ -50,7 +55,7 @@ public class PostagemController {
 	
 	@PostMapping
 	public ResponseEntity<Postagem> post(@Valid @RequestBody Postagem postagem){
-		if(postagemRepository.existsById(postagem.getTema().getId()))
+		if(temaRepository.existsById(postagem.getTema().getId()))
 			return ResponseEntity.status(HttpStatus.CREATED)
 				.body(postagemRepository.save(postagem));
 		
@@ -61,7 +66,7 @@ public class PostagemController {
 	public ResponseEntity<Postagem> put(@Valid @RequestBody Postagem postagem){
 		if (postagemRepository.existsById(postagem.getId())) {
 			
-			if (postagemRepository.existsById(postagem.getTema().getId()))
+			if (temaRepository.existsById(postagem.getTema().getId()))
 				return ResponseEntity.status(HttpStatus.OK)
 					.body(postagemRepository.save(postagem));
 			
